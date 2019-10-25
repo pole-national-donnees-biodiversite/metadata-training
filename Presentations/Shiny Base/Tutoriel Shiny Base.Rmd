@@ -1,0 +1,389 @@
+---
+title: "Tutoriel Shiny Base"
+author: "Elie"
+date: "10/25/2019"
+output: ioslides_presentation
+runtime: shiny
+---
+<style>
+  .col2 {
+    columns: 2 200px;         /* number of columns and width in pixels*/
+    -webkit-columns: 2 200px; /* chrome, safari */
+    -moz-columns: 2 200px;    /* firefox */
+  }
+  .col3 {
+    columns: 3 100px;
+    -webkit-columns: 3 100px;
+    -moz-columns: 3 100px;
+  }
+</style>
+```{r setup, include=FALSE}
+library(shiny)
+options(shiny.reactlog = TRUE)
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Contenu de la présentation
+
+Contenu de la séance:
+
+* Présentation de R Shiny
+* Construire une application
+  + Interface utilisateur
+  + Serveur
+  + Ergonomie
+* Shiny avancé
+
+## Présentation de Shiny
+
+**Shiny** est ...
+
+* un *package* R
+* un outil de *communication*
+* une interface *R - HTML*
+* un support d'*apprentissage*
+
+## Présentation de Shiny
+
+### Exemple: Interactive Plot
+
+```{r eruptions}
+inputPanel(
+  selectInput("n_breaks", label = "Number of bins:",
+              choices = c(10, 20, 35, 50), selected = 20),
+  
+  sliderInput("bw_adjust", label = "Bandwidth adjustment:",
+              min = 0.2, max = 2, value = 1, step = 0.2)
+)
+
+renderPlot({
+  hist(faithful$eruptions, probability = TRUE, breaks = as.numeric(input$n_breaks),
+       xlab = "Duration (minutes)", main = "Geyser eruption duration")
+  
+  dens <- density(faithful$eruptions, adjust = input$bw_adjust)
+  lines(dens, col = "blue")
+})
+```
+
+## Présentation de Shiny
+
+### Code HTML ...
+
+```{r img-code-html}
+shinyApp(
+  ui = fluidPage(
+    div(
+      imageOutput("img"),
+      style="text-align: center;"
+    )
+  ),
+  
+  server = function(input,output,session){
+    output$img <- renderImage({
+      list(src = "images/HTML-code.png",
+           width = "70%",
+           height = "100%")
+    }, deleteFile = FALSE)
+  }
+)
+```
+
+## Présentation de Shiny
+
+### ... rendu via R !
+
+```
+inputPanel(
+  selectInput("n_breaks", label = "Number of bins:",
+              choices = c(10, 20, 35, 50), selected = 20),
+
+  sliderInput("bw_adjust", label = "Bandwidth adjustment:",
+              min = 0.2, max = 2, value = 1, step = 0.2)
+)
+
+renderPlot({
+  hist(faithful$eruptions, probability = TRUE, breaks = as.numeric(input$n_breaks),
+  xlab = "Duration (minutes)", main = "Geyser eruption duration")
+
+  dens <- density(faithful$eruptions, adjust = input$bw_adjust)
+  lines(dens, col = "blue")
+})
+```
+
+## Construire une application
+
+### La logique Shiny
+
+Interface réactive à l'utilisateur
+
+```{r img-how-shiny-works}
+shinyApp(
+  ui = fluidPage(
+    div(
+      imageOutput("img"),
+      style="text-align: center;"
+    )
+  ),
+  
+  server = function(input,output,session){
+    output$img <- renderImage({
+      list(src = "images/shiny-schema.png",
+           width = "90%",
+           height = "100%")
+    }, deleteFile = FALSE)
+  }
+)
+```
+
+## Construire une application
+
+### Ecriture d'une application
+
+L'application est lancée via une fonction prenant deux arguments:
+
+* `ui` pour l'interface utilisateur
+* `server` pour l'interactivité de l'application
+
+La forme la plus simple est d'écrire en un seul script:
+```
+library(shiny)
+
+ui <- fluidPage(
+  *votre interface utilisateur ici* )
+server <- function(input, output, session) {
+  *vos traitements de données ici* }
+
+shinyApp(ui, server)
+```
+
+## Produire une interface utilisateur
+
+### Ecriture d'une interface utilisateur (UI)
+
+L'interface utilisateur se décline en deux principales catégories de fonctions:
+
+* structurantes: `fluidPage()`, `fluidRow()`, `column()`, `div()`, ...
+* interactives: `*Input()` pour les saisies, `*Output()` pour les sorties
+
+D'autres fonctions existent mais s'adressent davantage à des utilisateurs 
+expérimentés.
+
+## Produire une interface utilisateur
+
+### Fonctions structurantes
+
+Elles organisent l'affichage de la page. Il faut voir les différents appels
+de fonction comme les différentes couches d'une image.
+Le cas général est l'emploi de `fluidPage()` comme "arrière-plan". Elle va créer
+une page vide.
+
+<div class="col2">
+```{r shiny-background}
+library(shiny)
+cat("Sans fluidPage")
+shinyApp(ui = NULL, server = function(input,output,session){})
+cat("Avec fluidPage")
+shinyApp(ui = fluidPage("Affiché via une fluidPage."), server = function(input,output,session){})
+```
+</div>
+
+## Produire une interface utilisateur
+
+### Fonctions structurantes 2
+
+On peut effectuer un découpage par lignes ou colonnes avec `fluidRow()` et 
+`column()`, deux fonctions simples et efficaces. 
+
+```{r shiny-row-columns}
+library(shiny)
+shinyApp(ui = fluidPage(
+                column(4,
+                       div(
+                         "column()",
+                         style = "background: green; height: 200px;")
+                       ),
+                column(8,
+                       div(
+                         "column()",
+                         fluidRow(
+                           div(
+                             "fluidRow()",
+                             style = "background: blue; height: 100px;"
+                           )
+                         ),
+                         fluidRow(
+                           div(
+                             "fluidRow()",
+                             style = "background: orange; height: 100px;"
+                           )
+                         ),
+                         style = "background: red; height: 200px;")
+                       )
+        ), 
+        server = function(input,output,session){}
+)
+```
+
+## Produire une interface utilisateur
+
+### Fonctions interactives
+
+La première famille de fonctions interactives est celle des `*Input()`:
+
+* `textInput()` : saisie de texte
+* `numericInput()` : saisie de chiffres
+* `fileInput()` : chargement de fichiers
+* `sliderInput()` : saisie d'entier dans un intervalle
+* `selectInput()` : choix parmi options
+* `dateInput()` : saisie de dates
+* ... et de nombreux autres types et variantes !
+
+## Produire une interface utilisateur
+
+### Fonctions interactives
+
+La seconde famille de fonctions interactives est celle des `*Output()`:
+
+* `textOutput()` : saisie de texte
+* `tableOutput()` : chargement de fichiers
+* `plotOutput()` : saisie d'entier dans un intervalle
+* `imageOutput()` : choix parmi options
+* ... et de quoi afficher des contenus de types variables !
+
+En particulier, il existe toujours une manière d'adapter une visualisation 
+souhaitée, notamment tant qu'elle peut paraître via un `plot` classique sous R.
+
+## Ecrire un Serveur
+
+### Les variables particulières
+
+Un `server` est une fonction prenant trois arguments:
+
+* `input` : une liste réactive (`reactiveValues`) contenant les valeurs saisies via `*Input()`
+* `output` : une liste réactive recevant les valeurs traitées dans `server`
+* `session` : une variable "magique" qui fait que Shiny fonctionne
+
+```
+server <- function(input, output, session){
+  ...
+}
+```
+
+## Ecrire un Serveur
+
+### La réactivité
+
+Ou comment *guider* l'information à travers les fonctions de traitement souhaitées.
+
+```{r img-server-reactivities}
+shinyApp(
+  ui = fluidPage(
+    div(
+      imageOutput("img"),
+      style="text-align: center;"
+    )
+  ),
+  
+  server = function(input,output,session){
+    output$img <- renderImage({
+      list(src = "images/shiny-reactivity.png",
+           width = "80%",
+           height = "90%")
+    }, deleteFile = FALSE)
+  }
+)
+```
+
+## Ecrire un Serveur
+
+### Structurer la réactivité
+
+Le `server` agit par fonctions contenant des morceaux de code R à exécuter 
+lorsqu'il est souhaitable, ce qu'on peut *contrôler*.
+
+* `observe()`, `reactive()` : exécutent leur contenu lorsqu'une partie du 
+contenu varie
+* `observeEvent()`, `eventReactive()` : identique aux précédentes, mais ne
+s'exécutent que lorsqu'un *événement* survient
+* `reactiveValues()` : crée une *liste réactive* permettant de stocker les 
+valeurs souhaitées (e.g. variables temporaires)
+* `isolate()` : le code contenu dans cette fonction n'est pas réactif
+
+## Ecrire un Serveur
+
+### Traiter les données
+
+Les traitements sont effectués au gré de l'utilisateur, et le retour à 
+l'utilisateur s'effectue via les fonctions `render*()`:
+
+* `renderText()` : formatte la donnée en texte
+* `renderPlot()` : formatte la donnée en graphique
+* `renderTable()` : formatte la donnée en affichage tabulé
+* `renderUI()` : formatte la donnée en interface graphique (très polyvalent)
+* ...
+
+Ces rendus, comme les fonctions dans l'UI, produisent des fragments de code HTML.
+
+## Ecrire un Serveur
+
+### Le couplage serveur / UI
+
+En quelques règles simples:
+
+* Chaque fonction `*Input()`  et `*Output()` est dotée d'un identifiant *id*.
+* Chaque fonction `*Input()` va créer un élément nommé *id* à la variable 
+`input` de `server`
+* Chaque fonction `render*()` va être stockée dans un élement nommé *id* de la
+variable `output` de `server`
+
+## Ecrire un Serveur
+
+### Le couplage serveur / UI
+
+```
+shinyApp(
+  ui <- fluidPage(
+    # saisie de texte
+    textInput(inputId = "text_in", label = "Ecrivez ici:"),
+    
+    # sortie de texte
+    textOutput(outputId = "text_out")
+  ),
+  
+  server <- function(input, output, session){
+    # on renvoie exactement le même texte
+    output$text_in <- reactive({
+      input$text_in
+    })
+  }
+)
+```
+
+## Ecrire un Serveur
+
+### Le couplage serveur / UI
+
+```{r}
+library(shiny)
+
+shinyApp(
+  ui <- fluidPage(
+    # saisie de texte
+    textInput(inputId = "text_in", label = "Ecrivez ici:"),
+    
+    # sortie de texte
+    textOutput(outputId = "text_out"),
+    
+    h3("CTRL + F3: reactlog")
+  ),
+  
+  server <- function(input, output, session){
+    # on renvoie exactement le même texte
+    output$text_out <- reactive({
+      input$text_in
+    })
+  }
+)
+```
+
+## Elaborer l'ergonomie
