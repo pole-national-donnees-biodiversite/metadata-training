@@ -1,11 +1,11 @@
 ---
 title: "Tutoriel Shiny - Bases"
 author: "Elie Arnaud"
-date: "06/11/2019"
-output: 
-  ioslides_presentation: 
+date: "11/6/2019"
+output:
+  ioslides_presentation:
     fig_caption: yes
-    css: style.css 
+    css: style.css
 runtime: shiny
 ---
 
@@ -15,7 +15,7 @@ runtime: shiny
     -webkit-columns: 2 200px;
     -moz-columns: 2 200px;
   }
-  
+
   .col3 {
     columns: 3 100px;
     -webkit-columns: 3 100px;
@@ -54,7 +54,7 @@ Contenu de la séance:
 inputPanel(
   selectInput("n_breaks", label = "Number of bins:",
               choices = c(10, 20, 35, 50), selected = 20),
-  
+
   sliderInput("bw_adjust", label = "Bandwidth adjustment:",
               min = 0.2, max = 2, value = 1, step = 0.2)
 )
@@ -62,7 +62,7 @@ inputPanel(
 renderPlot({
   hist(faithful$eruptions, probability = TRUE, breaks = as.numeric(input$n_breaks),
        xlab = "Duration (minutes)", main = "Geyser eruption duration")
-  
+
   dens <- density(faithful$eruptions, adjust = input$bw_adjust)
   lines(dens, col = "blue")
 })
@@ -126,7 +126,7 @@ L'interface utilisateur se décline en deux principales catégories de fonctions
 * structurantes: `fluidPage()`, `fluidRow()`, `column()`, `div()`, ...
 * interactives: `*Input()` pour les saisies, `*Output()` pour les sorties
 
-D'autres fonctions existent mais s'adressent davantage à des utilisateurs 
+D'autres fonctions existent mais s'adressent davantage à des utilisateurs
 expérimentés.
 
 ## Produire une interface utilisateur | Fonctions structurantes
@@ -148,8 +148,8 @@ shinyApp(ui = fluidPage("Affiché via une fluidPage."), server = function(input,
 
 ## Produire une interface utilisateur | Fonctions structurantes 2
 
-On peut effectuer un découpage par lignes ou colonnes avec `fluidRow()` et 
-`column()`, deux fonctions simples et efficaces. 
+On peut effectuer un découpage par lignes ou colonnes avec `fluidRow()` et
+`column()`, deux fonctions simples et efficaces.
 
 ```{r shiny-row-columns}
 library(shiny)
@@ -176,7 +176,7 @@ shinyApp(ui = fluidPage(
                          ),
                          style = "background: red; height: 200px;")
                        )
-        ), 
+        ),
         server = function(input,output,session){}
 )
 ```
@@ -203,7 +203,7 @@ La seconde famille de fonctions interactives est celle des `*Output()`:
 * `imageOutput()` : choix parmi options
 * ... et de quoi afficher des contenus de types variables !
 
-En particulier, il existe toujours une manière d'adapter une visualisation 
+En particulier, il existe toujours une manière d'adapter une visualisation
 souhaitée, notamment tant qu'elle peut paraître via un `plot` classique sous R.
 
 ## Ecrire un Serveur | Les variables particulières
@@ -230,20 +230,20 @@ Ou comment *guider* l'information à travers les fonctions de traitement souhait
 
 ## Ecrire un Serveur | Structurer la réactivité
 
-Le `server` agit par fonctions contenant des morceaux de code R à exécuter 
+Le `server` agit par fonctions contenant des morceaux de code R à exécuter
 lorsqu'il est souhaitable, ce qu'on peut *contrôler*.
 
-* `observe()`, `reactive()` : exécutent leur contenu lorsqu'une partie du 
+* `observe()`, `reactive()` : exécutent leur contenu lorsqu'une partie du
 contenu varie
 * `observeEvent()`, `eventReactive()` : identique aux précédentes, mais ne
 s'exécutent que lorsqu'un *événement* survient
-* `reactiveValues()` : crée une *liste réactive* permettant de stocker les 
+* `reactiveValues()` : crée une *liste réactive* permettant de stocker les
 valeurs souhaitées (e.g. variables temporaires)
 * `isolate()` : le code contenu dans cette fonction n'est pas réactif
 
 ## Ecrire un Serveur | Traiter les données
 
-Les traitements sont effectués au gré de l'utilisateur, et le retour à 
+Les traitements sont effectués au gré de l'utilisateur, et le retour à
 l'utilisateur s'effectue via les fonctions `render*()`:
 
 * `renderText()` : formatte la donnée en texte
@@ -259,7 +259,7 @@ Ces rendus, comme les fonctions dans l'UI, produisent des fragments de code HTML
 En quelques règles simples:
 
 * Chaque fonction `*Input()`  et `*Output()` est dotée d'un identifiant *id*.
-* Chaque fonction `*Input()` va créer un élément nommé *id* à la variable 
+* Chaque fonction `*Input()` va créer un élément nommé *id* à la variable
 `input` de `server`
 * Chaque retour de fonction `render*()` va être stocké dans un élement nommé *id* de la
 variable `output` de `server`
@@ -271,11 +271,11 @@ shinyApp(
   ui <- fluidPage(
     # saisie de texte
     textInput(inputId = "text_in", label = "Ecrivez ici:"),
-    
+
     # sortie de texte
     textOutput(outputId = "text_out")
   ),
-  
+
   server <- function(input, output, session){
     # on renvoie exactement le même texte
     output$text_out <- reactive({
@@ -296,7 +296,7 @@ shinyApp(
       column(6,
              # saisie de texte
              textInput(inputId = "text_in", label = "Ecrivez ici:"),
-             
+
              # sortie de texte
              textOutput(outputId = "text_out")
       ),
@@ -309,15 +309,15 @@ shinyApp(
       imageOutput("img")
     )
   ),
-  
+
   server <- function(input, output, session){
-    
+
     # on renvoie exactement le même texte
     output$text_out <- reactive({
       input$text_in
     })
-    
-    
+
+
     observeEvent(input$tog,{
       output$img <- renderImage(list(src = "www/reactlog.png"), deleteFile = FALSE)
     })
@@ -414,14 +414,14 @@ ui <- material_page(
 )
 
 server <- function(input, output) {
-  
+
 }
 shinyApp(ui = ui, server = server)
 ```
 
 ## Elaborer l'ergonomie | Rendre l'application visuellement agréable
 
-Il est possible de jouer avec les apparences, les couleurs, les affichages, via 
+Il est possible de jouer avec les apparences, les couleurs, les affichages, via
 la balise `style`.
 
 ```{r style}
@@ -447,14 +447,14 @@ shinyApp(
 
 ## Elaborer l'ergonomie | Rendre l'application visuellement agréable
 
-`style` fait appel à des *propriétés CSS*. Cette méthode de mise en forme est 
+`style` fait appel à des *propriétés CSS*. Cette méthode de mise en forme est
 complètement documentée via ![](www/W3Schools_logo.png){width=20%}
 
 ```
 shinyApp(
   fluidPage(
     div("Lorem ipsum ...",
-        style="background: black; color: white; font-family: BlackChancery; 
+        style="background: black; color: white; font-family: BlackChancery;
         font-size: 1.5em; margin: 5px; padding: 5px;"),
     actionButton("button","Ne pas appuyer !",
                  style = "color: red; margin: 5px; padding: 5px;")
@@ -497,25 +497,25 @@ shinyApp(
         actionButton("reset", "Reset form")
     )
   ),
-  
+
   server = function(input, output) {
     observe({
       shinyjs::toggleState("submit", !is.null(input$name) && input$name != "")
     })
-    
+
     shinyjs::onclick("toggleAdvanced",
                      shinyjs::toggle(id = "advanced", anim = TRUE))    
-    
+
     shinyjs::onclick("update", shinyjs::html("time", date()))
-    
+
     observe({
       shinyjs::toggleClass("myapp", "big", input$big)
     })
-    
+
     observeEvent(input$submit, {
       shinyjs::alert("Thank you!")
     })
-    
+
     observeEvent(input$reset, {
       shinyjs::reset("myapp")
     })    
