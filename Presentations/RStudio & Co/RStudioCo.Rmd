@@ -263,7 +263,11 @@ Ressources diverses
 
 </div>
 
+<<<<<<< HEAD
 ## Ressources | Quelques asturces utiles ...
+=======
+## Raccourcis | Quelques astuces utiles ...
+>>>>>>> 1714932a24c37ab5ffd2356a79036c66d12ffd90
 
 - `CTRL+I:` auto-indentation
 - `CTRL+D:` supprime une ligne entière
@@ -278,7 +282,7 @@ crée une section nommée "`<commentaire>`"
 
 Toutes les fonctionalités peuvent être résumées via les *cheatsheets*.
 
-![](www/rs-cheatsheet.png){width=70%}
+![https://rstudio.com/resources/cheatsheets/](www/rs-cheatsheet.png){width=70%}
 
 ## Ressources | Veiller RStudio
 
