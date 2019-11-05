@@ -222,7 +222,7 @@ Le Rmd inclut des éléments:
 
 Polyvalent, mais exigeant.
 
-## Raccourcis | Quelques asturces utiles ...
+## Raccourcis | Quelques astuces utiles ...
 
 - `CTRL+I:` auto-indentation
 - `CTRL+D:` supprime une ligne entière
@@ -236,7 +236,7 @@ Polyvalent, mais exigeant.
 
 Toutes les fonctionalités peuvent être résumées via les *cheatsheets*.
 
-![](www/rs-cheatsheet.png){width=70%}
+![https://rstudio.com/resources/cheatsheets/](www/rs-cheatsheet.png){width=70%}
 
 ## Ressources | Veiller RStudio
 
