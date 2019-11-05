@@ -1,5 +1,6 @@
 ---
-title: "Tutoriel Shiny - Bases"
+title: "Tutoriel Shiny"
+subtitle: "Bases"
 author: "Elie Arnaud"
 date: "11/6/2019"
 output:
@@ -523,3 +524,23 @@ shinyApp(
 )
 ```
 </div>
+
+## Ressources | Cheatsheet
+
+![](www/shiny-french-cheatsheet.png){width=100%}
+
+## Ressources | Références
+
+* [RStudio Shiny]( https://shiny.rstudio.com/): articles et tutoriels pour appréhender les bases de Shiny
+* Développeurs Shiny: actifs sur Github
+  - Joe Cheng
+  - Dean Attali
+  
+## Next ...
+
+<center>
+  Pratique:  
+  
+  ![https://github.com/pole-national-donnees-biodiversite/metadata-training/tree/master/Tutorials/Shiny](www/qr_code.png)
+
+</center>
