@@ -222,7 +222,7 @@ Le Rmd inclut des éléments:
 
 Polyvalent, mais exigeant.
 
-## Raccourcis | Quelques asturces utiles ...
+## Raccourcis | Quelques astuces utiles ...
 
 - `CTRL+I:` auto-indentation
 - `CTRL+D:` supprime une ligne entière
