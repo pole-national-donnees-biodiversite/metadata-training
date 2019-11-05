@@ -4,8 +4,8 @@ author: "Elie"
 date: "11/6/2019"
 output: 
   ioslides_presentation: 
+    css: style.css
     fig_caption: yes
-    css: style.css 
 runtime: shiny
 ---
 
@@ -20,6 +20,18 @@ runtime: shiny
     -moz-columns: 2 200px;
   }
 
+  .column {
+    float: left;
+  }
+  
+  .left {
+    width: 70%;
+  }
+  
+  .right {
+    width: 30%;
+}
+  
   .col3 {
     columns: 3 100px;
     -webkit-columns: 3 100px;
@@ -40,8 +52,7 @@ knitr::opts_chunk$set(echo = FALSE)
   - Environnements
   - Gestion de projets
 * Présentations Rmd
-* Raccourcis et simplification
-* Notes et ressources
+* Ressources diverses
 
 
 ## Rappels sur l'interface
@@ -98,11 +109,11 @@ Environnements
 
 1 environnement = 1 collection de variables, fonctions, ...
 
-1 appel de fonction = 1 environnement "interne" (invisible)
+1 appel de fonction → 1 environnement "invisible" (variables inaccessibles à l'utilisateur)
 
-1 chargement de package = 1 environnement "externe" (visible)
+1 chargement de package → 1 environnement "visible" (variables accessibles à l'utilisateur)
 
-1(+) script(s) = 1+ environnement(s)
+1(+) script(s) → 1+ environnement(s)
 
 ## Environnements | Un mot sur les environnements
 
@@ -148,10 +159,23 @@ Une fois la fonctionnalité développée complètement, on peut l'intégrer à l
 
 ![Opération de Merge](www/merge_history.png)
 
+## Gestion de projets | Cloner un git avec RStudio
+
+Récupérer un git "en local" se fait via:
+
+`File > New project > Version Control > Git`
+
+Puis retranscrire l'URL du git en question.
+
+**Prérequis:**
+
+* avoir un git enregistré sur Github
+* avoir installé git sur sa machine
+
+
 ## Gestion de projets | Interface vers un git
 
-La technologie `git` a un vocabulaire propre qui n'est pas forcément évident: "add", 
-"commit", "pull", "push", "merge", "branch", ...
+La technologie `git` a un vocabulaire propre qui n'est pas forcément évident: "add", "commit", "pull", "push", "merge", "branch", ...
 
 RStudio apporte une interface simple à l'emploi !
 
@@ -159,19 +183,23 @@ RStudio apporte une interface simple à l'emploi !
 
 ## Gestion de projets | Projets R
 
+<div class="column left">
 Les projets R permettent:
 
 - de faciliter l'intégration de code à un git
 - de définir un environnement propre à un ensemble de scripts
 - d'écrire des packages R
+- de sauvegarder et reprendre un travail rapidement
+</div>
 
-Et ce, ergonomiquement.
-
+<div class="column right">
+![](www/rs-projects.png)
+</div>
 ## RStudio
 
 <div style="font-size: 80px;">
 
-R Markdown
+Présentations R Markdown
 
 </div>
 
@@ -181,6 +209,8 @@ R Markdown
 - Rmd: traitement de texte incluant du code R
 
 Idéal pour une mise en forme rapide d'un document contenant des scripts R.
+
+Possibilité de le tourner en présentation de type `ioslide`.
 
 ## Rmd | Exemple
 
@@ -220,14 +250,26 @@ Le Rmd inclut des éléments:
 - de programmation web: balises, styles CSS, ...
 - calculatoires: visualisations de *plots* 
 
-Polyvalent, mais exigeant.
+Polyvalent, mais exigeant:
 
-## Raccourcis | Quelques asturces utiles ...
+- difficilement exportable (notamment avec du code Shiny)
+- plusieurs fonctionnalités → plusieurs apprentissages̉
+
+## RStudio
+
+<div style="font-size: 80px;">
+
+Ressources diverses
+
+</div>
+
+## Ressources | Quelques asturces utiles ...
 
 - `CTRL+I:` auto-indentation
 - `CTRL+D:` supprime une ligne entière
 - `CTRL+MAJ+C:` commente une ligne entière
-- Ecrire `# <commentaire> ----`: crée une section nommée
+- Ecrire "`# <commentaire> ----`":  
+crée une section nommée "`<commentaire>`"  
 ![](www/sections.png) (coin supérieur droit des `Scripts`)  
 - `flèches haut/bas:` naviguer dans l'historique des lignes de code exécutées
 - Fonction `browser()`: met en pause le script en exécution pour laisser la main

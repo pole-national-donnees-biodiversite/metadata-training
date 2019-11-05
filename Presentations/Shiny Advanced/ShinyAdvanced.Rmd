@@ -1,0 +1,53 @@
+---
+title: "Tutoriel Shiny - Notions avancées"
+author: "Elie Arnaud"
+date: "11/6/2019"
+output:
+  ioslides_presentation:
+    fig_caption: yes
+    css: style.css
+runtime: shiny
+---
+
+<style>
+  .col2 {
+    columns: 2 200px;
+    -webkit-columns: 2 200px;
+    -moz-columns: 2 200px;
+  }
+
+  .col3 {
+    columns: 3 100px;
+    -webkit-columns: 3 100px;
+    -moz-columns: 3 100px;
+  }
+</style>
+
+```{r setup, include=FALSE}
+library(shiny)
+options(shiny.reactlog = TRUE)
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Contenu de la présentation
+
+Contenu de la séance:
+
+* Notion de Design Pattern
+* Modules R Shiny
+* Génération procédurale d'UI
+
+## Design Pattern | Principe
+
+Les *design patterns* sont des "**bonnes pratiques** (...) pour la résolution d'un ou de plusieurs problèmes de conception"[^1] d'application. 
+
+Il s'agira donc fondamentalement d'une conception de logiciel efficace sur de nombreux points (validité, robustesse, intégrité, modularité, ...) qui sera reprise par d'autres développeurs.
+
+[^1]: définition tirée de "La notion de Design Pattern" by [Openclassroom](https://openclassrooms.com/fr/courses/1782251-creez-des-applications-de-qualite-avec-le-design-pattern-mvc/2370861-la-notion-de-design-pattern)
+
+## Design Pattern | Comment les (ré)employer
+
+La définition d'un design pattern se fait par plusieurs éléments:
+
+* définition des éléments du pattern
+* documentation des différents éléments ("principes actifs")
